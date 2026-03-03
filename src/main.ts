@@ -3,43 +3,50 @@ import './style.scss'
 const app = document.getElementById('app')!
 
 const TOTAL_CATS = 6
-let currentIndex = 0
+let currentCount = 0
 let likedCats: string[] = []
-let cats: string[] = []
 
 function init() {
-  loadCats()
+  createAndShowCard()
 }
 
-function loadCats() {
-  for (let i = 0; i < TOTAL_CATS; i++) {
-    cats.push(`https://cataas.com/cat?random=${Math.random()}`)
+function getCatUrl() {
+  return `https://cataas.com/cat?random=${Math.random()}`
+}
+
+function createAndShowCard() {
+  if (currentCount >= TOTAL_CATS) {
+    showSummary()
+    return
   }
 
-  renderCards()
-}
+  const imageUrl = getCatUrl()
+  const card = createCard(imageUrl)
 
-function renderCards() {
   app.innerHTML = ''
+  app.appendChild(card)
 
-  cats
-    .slice(currentIndex)
-    .reverse()
-    .forEach((url) => {
-      const card = createCard(url)
-      app.appendChild(card)
-    })
+  currentCount++
 }
 
 function createCard(imageUrl: string) {
   const card = document.createElement('div')
-  card.className = 'card'
+  card.className = 'card loading'
 
-  const img = document.createElement('img')
-  img.src = imageUrl
-  img.draggable = false
+  const loadingImg = document.createElement('img')
+  loadingImg.src = '/loading.gif'
+  loadingImg.className = 'loading-img'
+  card.appendChild(loadingImg)
 
-  card.appendChild(img)
+  const realImg = new Image()
+  realImg.src = imageUrl
+  realImg.draggable = false
+
+  realImg.onload = () => {
+    card.classList.remove('loading')
+    card.replaceChild(realImg, loadingImg)
+  }
+
   addSwipe(card, imageUrl)
 
   return card
@@ -52,8 +59,6 @@ function addSwipe(card: HTMLElement, imageUrl: string) {
 
   card.addEventListener('pointerdown', (e) => {
     if (e.button !== 0) return
-
-    e.preventDefault()
 
     isDragging = true
     startX = e.clientX
@@ -80,50 +85,41 @@ function addSwipe(card: HTMLElement, imageUrl: string) {
     card.releasePointerCapture(e.pointerId)
 
     const diff = currentX - startX
-
     card.style.transition = 'transform 0.4s ease-out'
 
     if (diff > 150) {
       likedCats.push(imageUrl)
       card.style.transform = `translateX(1000px) rotate(30deg)`
-      setTimeout(nextCard, 300)
-    }
-    else if (diff < -150) {
+      setTimeout(createAndShowCard, 300)
+    } else if (diff < -150) {
       card.style.transform = `translateX(-1000px) rotate(-30deg)`
-      setTimeout(nextCard, 300)
-    }
-    else {
+      setTimeout(createAndShowCard, 300)
+    } else {
       card.style.transform = 'translateX(0) rotate(0)'
     }
   })
-}
-
-function nextCard() {
-  currentIndex++
-
-  if (currentIndex >= TOTAL_CATS) {
-    showSummary()
-  } else {
-    renderCards()
-  }
 }
 
 function showSummary() {
   app.innerHTML = `
     <div style="text-align:center">
       <h2>You liked ${likedCats.length} cats 😺</h2>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px">
-        ${likedCats.map((url) => `<img src="${url}" style="width:100%;border-radius:10px"/>`).join('')}
+      <div class="summary-container" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px">
+        ${likedCats
+      .map(
+        (url) =>
+          `<img src="${url}"/>`
+      )
+      .join('')}
       </div>
       <button id="retry">RETRY</button>
     </div>
   `
 
   document.getElementById('retry')!.addEventListener('click', () => {
-    currentIndex = 0
+    currentCount = 0
     likedCats = []
-    cats = []
-    loadCats()
+    createAndShowCard()
   })
 }
 

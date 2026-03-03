@@ -11,7 +11,7 @@ body {
     align-items: center;
     height: 100vh;
     width: 100%;
-    background-image: url('/img/outside_all_cat_bg.jpg');
+    background-image: url('./assets/img/outside_all_cat_bg.jpg');
     background-size: 450px;
     background-position: center;
 }
@@ -22,7 +22,7 @@ body {
     display: flex;
     align-items: center;
     padding: 20px 5%;
-    background-image: url('/img/all_cat_bg.jpg');
+    background-image: url('./assets/img/all_cat_bg.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -44,15 +44,33 @@ body {
     overflow: hidden;
     background: white;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s ease;
+    cursor: pointer;
     user-select: none;
     -webkit-user-drag: none;
+
+    &.loading {
+        width: 150px;
+        height: 150px;
+        left: 50%;
+        top: 45%;
+        transform: translate(-50%, -50%);
+        box-shadow: none;
+        cursor: initial;
+    }
 
     img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         pointer-events: none;
+    }
+}
+
+.summary-container {
+    img {
+        width: 100%;
+        height: 150px;
+        border-radius: 10px;
     }
 }
 
