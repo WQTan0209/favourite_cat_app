@@ -5,7 +5,7 @@ const app = document.getElementById('app')!
 type AppState = 'start' | 'game' | 'summary'
 let state: AppState = 'start'
 
-const TOTAL_CATS = 8
+const TOTAL_CATS = 15
 let currentCount = 0
 let likedCats: string[] = []
 
@@ -70,7 +70,7 @@ function renderStart() {
   })
 }
 
-/* GAME */
+/* GAME PAGE */
 function getCatUrl() {
   return `https://cataas.com/cat?random=${Math.random()}`
 }
@@ -171,7 +171,7 @@ function addSwipe(card: HTMLElement, imageUrl: string) {
   })
 }
 
-/* SUMMARY */
+/* SUMMARY PAGE */
 function renderSummary() {
   app.innerHTML = `
     <div class="summary-container screen text-align-center">
