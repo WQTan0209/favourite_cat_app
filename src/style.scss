@@ -2,6 +2,7 @@ $primary-color: #ffaeae;
 
 // Initial
 * {
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -9,8 +10,14 @@ $primary-color: #ffaeae;
 }
 
 body {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     height: 100vh;
     width: 100%;
@@ -31,7 +38,9 @@ body {
 }
 
 .grid {
+    display: -ms-grid;
     display: grid;
+    -ms-grid-columns: 1fr 10px 1fr;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     margin-top: 20px;
@@ -42,31 +51,48 @@ body {
 }
 
 .screen {
+    -webkit-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
     transition: all 0.4s ease;
 }
 
 .screen.exit {
+    -webkit-transform: rotateY(-90deg);
     transform: rotateY(-90deg);
     opacity: 0;
 }
 
 .btn-list {
     margin-top: 15px;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     gap: 15px;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
 }
 
 .btn {
     width: 125px;
     height: 50px;
+    min-width: -webkit-fit-content;
+    min-width: -moz-fit-content;
     min-width: fit-content;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     gap: 7px;
     padding: 15px 30px;
     margin: 20px auto 0;
+    -webkit-transition: 0.2s;
+    -o-transition: 0.2s;
     transition: 0.2s;
     cursor: pointer;
     font-size: 18px;
@@ -87,15 +113,22 @@ body {
 
 .transform-scale-bigger {
     display: block;
+    -webkit-animation-name: transformScaleBigger;
     animation-name: transformScaleBigger;
+    -webkit-animation-duration: 3s;
     animation-duration: 3s;
+    -webkit-animation-iteration-count: infinite;
     animation-iteration-count: infinite;
 }
 
 .container {
     width: 450px;
     height: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     padding: 20px 7.5%;
     background-image: url('./assets/img/all_cat_bg.jpg');
@@ -115,6 +148,7 @@ body {
     width: 100%;
     position: relative;
     margin-bottom: 50px;
+    -webkit-perspective: 1000px;
     perspective: 1000px;
 }
 
@@ -132,8 +166,12 @@ body {
     border-radius: 15px;
     overflow: hidden;
     cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
     -webkit-user-drag: none;
+    -ms-touch-action: none;
     touch-action: none;
 
     &.loading {
@@ -142,7 +180,10 @@ body {
         height: 150px;
         left: 50%;
         top: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
+        -webkit-box-shadow: none;
         box-shadow: none;
         cursor: initial;
     }
@@ -151,6 +192,7 @@ body {
         width: 100%;
         height: 100%;
         max-height: 450px;
+        -o-object-fit: cover;
         object-fit: cover;
         pointer-events: none;
     }
@@ -165,8 +207,14 @@ body {
     margin-bottom: 15px;
 
     .category {
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
         justify-content: space-between;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
         align-items: center;
         margin-top: 10px;
         font-size: 16px;
@@ -186,6 +234,7 @@ body {
             width: 100%;
             height: 150px;
             border-radius: 10px;
+            -o-object-fit: cover;
             object-fit: cover;
         }
     }
@@ -194,14 +243,20 @@ body {
 // ANIMATIONS
 @keyframes transformScaleBigger {
     0% {
+        -webkit-transform: scale(1);
+        -ms-transform: scale(1);
         transform: scale(1);
     }
 
     50% {
+        -webkit-transform: scale(1.1);
+        -ms-transform: scale(1.1);
         transform: scale(1.1);
     }
 
     100% {
+        -webkit-transform: scale(1);
+        -ms-transform: scale(1);
         transform: scale(1);
     }
 }
