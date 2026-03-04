@@ -1,4 +1,5 @@
 1. Project Overview
+
 This is a Single-Page Web Application (SPA) called PAW PAW!, designed to help users discover which types of cats or kittens they like.
 The user can swipe cat images to the right to “like” or left to “dislike,” similar to popular dating apps.
 
@@ -7,6 +8,7 @@ At the end, the user sees a summary of all the cats they liked.
 
 
 2. Technologies & Code Used
+
 HTML5 – Structure and layout
 CSS3 – Styling and animations (including custom keyframes & transitions)
 TypeScript – Type-safe JavaScript development
@@ -15,4 +17,5 @@ Google Fonts - Custom title font for better UX
 
 
 3. API Used
+
 Cataas API – As cat images source
