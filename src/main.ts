@@ -2,29 +2,103 @@ import './style.scss'
 
 const app = document.getElementById('app')!
 
-const TOTAL_CATS = 6
+type AppState = 'start' | 'game' | 'summary'
+let state: AppState = 'start'
+
+const TOTAL_CATS = 8
 let currentCount = 0
 let likedCats: string[] = []
 
+/* APP ENTRY */
 function init() {
-  createAndShowCard()
+  render()
 }
 
+/* RENDER */
+function render() {
+  app.innerHTML = ''
+
+  if (state === 'start') {
+    renderStart()
+  }
+
+  if (state === 'game') {
+    createAndShowCard()
+  }
+
+  if (state === 'summary') {
+    renderSummary()
+  }
+}
+
+/* SWITCH PAGE WITH ANIMATION */
+function changeState(newState: AppState) {
+  const currentScreen = app.firstElementChild as HTMLElement
+
+  if (currentScreen) {
+    currentScreen.classList.add('exit')
+
+    setTimeout(() => {
+      state = newState
+      render()
+    }, 400)
+  } else {
+    state = newState
+    render()
+  }
+}
+
+/* START PAGE */
+function renderStart() {
+  const container = document.createElement('div')
+  container.className = 'start-container screen text-align-center'
+
+  container.innerHTML = `
+    <h1 class="title quicksand-bold primary-color">Welcome To</h1>
+    <h1 class="title quicksand-bold primary-color">PAW PAW!</h1>
+    <img src="./src/assets/img/cat_icon.jpg" class="image-icon" />
+    <button id="start-btn" class="btn">
+      <img src="./src/assets/img/cat_paws_white.png" />
+      <span>START</span>
+    </button>
+  `
+
+  app.appendChild(container)
+
+  document.getElementById('start-btn')!.addEventListener('click', () => {
+    changeState('game')
+  })
+}
+
+/* GAME */
 function getCatUrl() {
   return `https://cataas.com/cat?random=${Math.random()}`
 }
 
 function createAndShowCard() {
   if (currentCount >= TOTAL_CATS) {
-    showSummary()
+    changeState('summary')
     return
   }
 
   const imageUrl = getCatUrl()
   const card = createCard(imageUrl)
 
-  app.innerHTML = ''
-  app.appendChild(card)
+  app.innerHTML = `
+    <div class="game-container screen">
+      <div class="instruction-container text-align-center">
+        <span class="subtitle quicksand-bold primary-color transform-scale-bigger">Let's Swipe Cute Cat!</span>
+        <div class="category">
+          <span class="primary-color">&#8592; Dislike</span>
+          <span class="primary-color">Like &#8594;</span>
+        </div>
+      </div>
+      <div class="card-container"></div>
+    </div>
+  `
+
+  const container = app.querySelector('.card-container')!
+  container.appendChild(card)
 
   currentCount++
 }
@@ -58,12 +132,9 @@ function addSwipe(card: HTMLElement, imageUrl: string) {
   let isDragging = false
 
   card.addEventListener('pointerdown', (e) => {
-    if (e.button !== 0) return
-
     isDragging = true
     startX = e.clientX
     currentX = e.clientX
-
     card.setPointerCapture(e.pointerId)
     card.style.transition = 'none'
   })
@@ -83,8 +154,8 @@ function addSwipe(card: HTMLElement, imageUrl: string) {
     isDragging = false
 
     card.releasePointerCapture(e.pointerId)
-
     const diff = currentX - startX
+
     card.style.transition = 'transform 0.4s ease-out'
 
     if (diff > 150) {
@@ -100,26 +171,39 @@ function addSwipe(card: HTMLElement, imageUrl: string) {
   })
 }
 
-function showSummary() {
+/* SUMMARY */
+function renderSummary() {
   app.innerHTML = `
-    <div style="text-align:center">
-      <h2>You liked ${likedCats.length} cats 😺</h2>
-      <div class="summary-container" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px">
+    <div class="summary-container screen text-align-center">
+      <h2 class="quicksand-bold primary-color">Here's Your ${likedCats.length} Favourite Cats 😺!</h2>
+      <div class="grid image-list">
         ${likedCats
-      .map(
-        (url) =>
-          `<img src="${url}"/>`
-      )
+      .map((url) => `<img src="${url}" />`)
       .join('')}
       </div>
-      <button id="retry">RETRY</button>
+      <div class="btn-list">
+        <button id="retry-btn" class="btn">
+          <img src="./src/assets/img/cat_paws_white.png" />
+          <span>RETRY</span>
+        </button>
+        <button id="exit-btn" class="btn">
+          <img src="./src/assets/img/cat_paws_white.png" />
+          <span>EXIT</span>
+        </button>
+      </div>
     </div>
   `
 
-  document.getElementById('retry')!.addEventListener('click', () => {
+  document.getElementById('retry-btn')!.addEventListener('click', () => {
     currentCount = 0
     likedCats = []
-    createAndShowCard()
+    changeState('game')
+  })
+
+  document.getElementById('exit-btn')!.addEventListener('click', () => {
+    currentCount = 0
+    likedCats = []
+    changeState('start')
   })
 }
 
